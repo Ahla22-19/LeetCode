@@ -1,10 +1,4 @@
 class Solution:
-    def constructTransformedArray(self, nums: List[int]) -> List[int]:
-
-        result = []
-
-        for i in range (len(nums)):
-            result.append(nums[(i + nums[i]) % len(nums)])
-                
-        return result
-
+    def constructTransformedArray(self, nums):
+        n = len(nums)
+        return [nums[((i + nums[i]) % n + n) % n] for i in range(n)]

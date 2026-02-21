@@ -1,0 +1,12 @@
+class Solution:
+    def numOfWays(self, n: int) -> int:
+        MOD = 1000000007
+        aba = 6
+        abc = 6
+        
+        for i in range(n - 1):
+            new_aba = (3 * aba + 2 * abc) % MOD
+            new_abc = (2 * aba + 2 * abc) % MOD
+            aba, abc = new_aba, new_abc
+        
+        return (aba + abc) % MOD
