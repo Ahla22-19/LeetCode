@@ -1,39 +1,28 @@
 # Definition for a binary tree node.
-# class TreeNode(object):
+# class TreeNode:
 #     def __init__(self, val=0, left=None, right=None):
 #         self.val = val
 #         self.left = left
 #         self.right = right
+class Solution:
+    def maxProduct(self, root: Optional[TreeNode]) -> int:
 
-class Solution(object):
-    def maxProduct(self, root):
-        """
-        :type root: Optional[TreeNode]
-        :rtype: int
-        """
-        MOD = 10**9 + 7
-        self.totalSum = 0
-        self.maxProd = 0
-
-        def dfsTotal(node):
-            if not node:
-                return
-            self.totalSum += node.val
-            dfsTotal(node.left)
-            dfsTotal(node.right)
-
-        def dfs(node):
-            if not node:
+        all_sums = []
+        def tree_sum(node):
+            if node is None:
                 return 0
+            
+            left_s = tree_sum(node.left)
+            right_s = tree_sum(node.right)
 
-            left = dfs(node.left)
-            right = dfs(node.right)
+            current_s = left_s + right_s + node.val
+            all_sums.append(current_s)
+            return current_s
 
-            subSum = left + right + node.val
-            self.maxProd = max(self.maxProd, subSum * (self.totalSum - subSum))
+        total_sum = tree_sum(root)
+        best = 0
 
-            return subSum
+        for s in all_sums:
+            best = max(best, s* (total_sum - s))
 
-        dfsTotal(root)
-        dfs(root)
-        return self.maxProd % MOD
+        return best % (10**9 + 7)
