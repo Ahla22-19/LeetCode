@@ -5,20 +5,31 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def subtreeWithAllDeepest(self, root: TreeNode) -> TreeNode:
-        # Return result of subtree: (node, dist)
-        def dfs(node):
+    def subtreeWithAllDeepest(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        depth = {None: -1}
+        def dfs(node, parent = None):
             if not node:
-                return (None, 0)
+                return
+            depth[node] = depth[parent] + 1
+            dfs(node.left, node)
+            dfs(node.right, node)
 
-            l_node, l_dist = dfs(node.left)
-            r_node, r_dist = dfs(node.right)
+        dfs(root)
+        deepest = max(depth.values())
 
-            if l_dist > r_dist:
-                return (l_node, l_dist + 1)
-            elif r_dist > l_dist:
-                return (r_node, r_dist + 1)
-            else:
-                return (node, l_dist + 1)
+        def answer(node):
+            if not node or depth[node] == deepest:
+                return node
 
-        return dfs(root)[0]
+            L = answer(node.left)
+            R = answer(node.right)
+
+            
+            if L and R:
+                 return node
+            return L or R
+
+        return answer(root)
+
+
+                
